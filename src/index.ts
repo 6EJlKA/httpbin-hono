@@ -12,10 +12,19 @@ import { requestInspection } from "./routes/request-inspection";
 import { responseFormats } from "./routes/response-formats";
 import { responseInspection } from "./routes/response-inspection";
 import { statusCodes } from "./routes/status-codes";
+import { default as spec } from "./spec.json";
 import { prettyJSON } from "./utils/pretty-json";
 
 const app = new Hono();
 app.use(prettyJSON);
+
+app.get("/spec.json", async (c) => {
+	spec.host = new URL(c.req.url).host;
+	spec.schemes =
+		new URL(c.req.url).protocol === "https:" ? ["https"] : ["http"];
+
+	return c.json(spec);
+});
 
 // Root endpoint
 app.get("/", swaggerUI({ url: "/spec.json" }));

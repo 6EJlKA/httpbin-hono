@@ -1,7 +1,7 @@
 {
 	"basePath": "/",
 	"definitions": {},
-	"host": "httpbin-hono.naas.workers.dev",
+	"host": "example.com",
 	"info": {
 		"contact": {
 			"name": "Nakano as a Service",
@@ -1429,7 +1429,7 @@
 		}
 	},
 	"protocol": "https",
-	"schemes": ["https"],
+	"schemes": ["http", "https"],
 	"swagger": "2.0",
 	"tags": [
 		{
