@@ -1,5 +1,7 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { Hono } from "hono";
+import { prettyJSON } from "hono/pretty-json";
+
 import { anything } from "./routes/anything";
 import { authentication } from "./routes/authentication";
 import { cookies } from "./routes/cookies";
@@ -13,6 +15,7 @@ import { responseInspection } from "./routes/response-inspection";
 import { statusCodes } from "./routes/status-codes";
 
 const app = new Hono();
+app.use(prettyJSON());
 
 // Root endpoint
 app.get("/", swaggerUI({ url: "/spec.json" }));
