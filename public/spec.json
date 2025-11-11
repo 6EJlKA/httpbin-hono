@@ -18,7 +18,7 @@
 					{
 						"in": "path",
 						"name": "n",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["text/html"],
@@ -216,7 +216,7 @@
 				"produces": ["application/json"],
 				"responses": {
 					"200": {
-						"description": "Sucessful authentication."
+						"description": "Successful authentication."
 					},
 					"401": {
 						"description": "Unsuccessful authentication."
@@ -244,7 +244,7 @@
 					{
 						"in": "path",
 						"name": "n",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/octet-stream"],
@@ -396,7 +396,7 @@
 				"produces": ["application/json"],
 				"responses": {
 					"200": {
-						"description": "Defalte-encoded data."
+						"description": "Deflate-encoded data."
 					}
 				},
 				"summary": "Returns Deflate-encoded data.",
@@ -409,7 +409,7 @@
 					{
 						"in": "path",
 						"name": "delay",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/json"],
@@ -426,7 +426,7 @@
 					{
 						"in": "path",
 						"name": "delay",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/json"],
@@ -443,7 +443,7 @@
 					{
 						"in": "path",
 						"name": "delay",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/json"],
@@ -460,7 +460,7 @@
 					{
 						"in": "path",
 						"name": "delay",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/json"],
@@ -477,7 +477,7 @@
 					{
 						"in": "path",
 						"name": "delay",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/json"],
@@ -494,7 +494,7 @@
 					{
 						"in": "path",
 						"name": "delay",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/json"],
@@ -554,7 +554,7 @@
 				"produces": ["application/json"],
 				"responses": {
 					"200": {
-						"description": "Sucessful authentication."
+						"description": "Successful authentication."
 					},
 					"401": {
 						"description": "Unsuccessful authentication."
@@ -641,7 +641,7 @@
 				"produces": ["application/json"],
 				"responses": {
 					"200": {
-						"description": "Sucessful authentication."
+						"description": "Successful authentication."
 					},
 					"401": {
 						"description": "Unsuccessful authentication."
@@ -787,7 +787,7 @@
 				"produces": ["application/json"],
 				"responses": {
 					"200": {
-						"description": "Sucessful authentication."
+						"description": "Successful authentication."
 					},
 					"404": {
 						"description": "Unsuccessful authentication."
@@ -905,12 +905,12 @@
 					{
 						"in": "path",
 						"name": "n",
-						"type": "int"
+						"type": "integer"
 					},
 					{
 						"in": "path",
 						"name": "offset",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["text/html"],
@@ -965,7 +965,7 @@
 					{
 						"in": "path",
 						"name": "numbytes",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/octet-stream"],
@@ -1000,7 +1000,7 @@
 					{
 						"in": "query",
 						"name": "status_code",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["text/html"],
@@ -1034,7 +1034,7 @@
 						"in": "formData",
 						"name": "status_code",
 						"required": false,
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["text/html"],
@@ -1058,7 +1058,7 @@
 						"in": "formData",
 						"name": "status_code",
 						"required": false,
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["text/html"],
@@ -1087,7 +1087,7 @@
 					{
 						"in": "path",
 						"name": "n",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["text/html"],
@@ -1106,7 +1106,7 @@
 					{
 						"in": "path",
 						"name": "n",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["text/html"],
@@ -1359,7 +1359,7 @@
 					{
 						"in": "path",
 						"name": "n",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/octet-stream"],
@@ -1378,7 +1378,7 @@
 					{
 						"in": "path",
 						"name": "n",
-						"type": "int"
+						"type": "integer"
 					}
 				],
 				"produces": ["application/json"],
