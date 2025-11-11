@@ -7,7 +7,7 @@
 			"name": "Nakano as a Service",
 			"url": "https://github.com/nakanoasaservice"
 		},
-		"description": "A [httpbin](https://httpbin.org/) implementation built with [Hono](https://hono.dev/) and deployed on Cloudflare Workers. <br/> GitHub: [nakanoasaservice/httpbin-hono](https://github.com/nakanoasaservice/httpbin-hono) <br/> <br/> Originally created by [Kenneth Reitz](https://www.kennethreitz.org/).",
+		"description": "A [httpbin](https://httpbin.org/) implementation built with [Hono](https://hono.dev/) and deployed on Cloudflare Workers. <br/> GitHub: [nakanoasaservice/httpbin-hono](https://github.com/nakanoasaservice/httpbin-hono) <br/> <br/> Originally created by [Kenneth Reitz](https://www.kennethreitz.org/). <br/> <br/> Click the button below to deploy to Cloudflare Workers: <br/> [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/nakanoasaservice/httpbin-hono)",
 		"title": "httpbin-hono",
 		"version": "0.1.0"
 	},
