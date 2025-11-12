@@ -98,8 +98,8 @@ cookies.get("/cookies", (c) => {
 	if (cookieHeader) {
 		cookieHeader.split(";").forEach((cookie) => {
 			const [name, value] = cookie.trim().split("=");
-			if (name && value) {
-				cookies[name] = decodeURIComponent(value);
+			if (name) {
+				cookies[name] = value ? decodeURIComponent(value) : "";
 			}
 		});
 	}
