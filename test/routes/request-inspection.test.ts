@@ -35,7 +35,7 @@ describe("Request Inspection", () => {
 			expect(data.headers).toBeDefined();
 			// HTTP headers are normalized to lowercase
 			expect(data.headers["user-agent"]).toBe("test-agent");
-			expect(data.headers["accept"]).toBe("application/json");
+			expect(data.headers.accept).toBe("application/json");
 			expect(data.headers["custom-header"]).toBe("custom-value");
 		});
 
