@@ -3,10 +3,10 @@ import { Hono } from "hono";
 
 import { getHeaders, getOrigin } from "../utils/request";
 
-export const responseFormats = new Hono<{ Bindings: CloudflareBindings }>();
+export const responseFormats = new Hono<{ Bindings: Env }>();
 
 async function serveTemplate(
-	c: Context<{ Bindings: CloudflareBindings }>,
+	c: Context<{ Bindings: Env }>,
 	path: string,
 	contentType: string,
 ): Promise<Response> {

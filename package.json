@@ -2,11 +2,12 @@
 	"name": "httpbin-hono",
 	"type": "module",
 	"scripts": {
-		"dev": "wrangler dev",
-		"deploy": "wrangler deploy --minify",
-		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
+		"cf-typegen": "wrangler types",
+		"check-types": "pnpm run cf-typegen && tsc --noEmit",
+		"check:fix": "biome check --write",
 		"check": "biome check",
-		"check:fix": "biome check --write"
+		"deploy": "wrangler deploy --minify",
+		"dev": "wrangler dev"
 	},
 	"dependencies": {
 		"@hono/swagger-ui": "^0.5.2",
