@@ -23,7 +23,7 @@ const IMAGE_CONFIG: Record<ImageFormat, { path: string; contentType: string }> =
 		},
 	};
 
-export const images = new Hono<{ Bindings: Cloudflare.Env }>();
+export const images = new Hono<{ Bindings: CloudflareBindings }>();
 
 // GET /image
 images.get("/image", async (c) => {
@@ -70,7 +70,7 @@ images.get("/image/svg", async (c) => {
 });
 
 async function serveImage(
-	c: Context<{ Bindings: Cloudflare.Env }>,
+	c: Context<{ Bindings: CloudflareBindings }>,
 	format: ImageFormat,
 ): Promise<Response> {
 	const config = IMAGE_CONFIG[format];
