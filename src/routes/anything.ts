@@ -31,8 +31,8 @@ anything.all("/anything", async (c) => {
 	});
 });
 
-// Handle all methods for /anything/:anything
-anything.all("/anything/:anything", async (c) => {
+// Handle all methods for /anything/* (matches multiple path segments)
+anything.all("/anything/*", async (c) => {
 	const method = c.req.method;
 	const args = getQueryParams(c);
 	const headers = getHeaders(c);
