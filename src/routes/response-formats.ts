@@ -63,17 +63,23 @@ responseFormats.get("/html", async (c) => {
 });
 
 // GET /robots.txt
-responseFormats.get("/robots.txt", (c) => {
-	c.header("Content-Type", "text/plain");
-	return c.text(`User-agent: *
+responseFormats.get("/robots.txt", () => {
+	return new Response(
+		`User-agent: *
 Disallow: /deny
-`);
+`,
+		{
+			headers: {
+				"Content-Type": "text/plain",
+			},
+		},
+	);
 });
 
 // GET /deny
-responseFormats.get("/deny", (c) => {
-	c.header("Content-Type", "text/plain");
-	return c.text(`          .-''''''-.
+responseFormats.get("/deny", () => {
+	return new Response(
+		`          .-''''''-.
         .' _      _ '.
        /   O      O   \\\\
       :                :
@@ -83,7 +89,13 @@ responseFormats.get("/deny", (c) => {
         '.          .'
           '-......-'
      YOU SHOULDN'T BE HERE
-`);
+`,
+		{
+			headers: {
+				"Content-Type": "text/plain",
+			},
+		},
+	);
 });
 
 // GET /encoding/utf8
