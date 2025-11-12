@@ -63,22 +63,21 @@ responseFormats.get("/html", async (c) => {
 });
 
 // GET /robots.txt
-responseFormats.get("/robots.txt", () => {
-	return new Response(
+responseFormats.get("/robots.txt", (c) => {
+	return c.text(
 		`User-agent: *
 Disallow: /deny
 `,
+		200,
 		{
-			headers: {
-				"Content-Type": "text/plain",
-			},
+			"Content-Type": "text/plain",
 		},
 	);
 });
 
 // GET /deny
-responseFormats.get("/deny", () => {
-	return new Response(
+responseFormats.get("/deny", (c) => {
+	return c.text(
 		`          .-''''''-.
         .' _      _ '.
        /   O      O   \\\\
@@ -90,10 +89,9 @@ responseFormats.get("/deny", () => {
           '-......-'
      YOU SHOULDN'T BE HERE
 `,
+		200,
 		{
-			headers: {
-				"Content-Type": "text/plain",
-			},
+			"Content-Type": "text/plain",
 		},
 	);
 });

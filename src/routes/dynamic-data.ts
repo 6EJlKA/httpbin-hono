@@ -1,4 +1,4 @@
-import { type Context, Hono } from "hono";
+import { Hono } from "hono";
 
 import {
 	getHeaders,
@@ -98,7 +98,7 @@ dynamicData.get("/bytes/:n", (c) => {
 });
 
 // GET /delay/:delay, POST /delay/:delay, PUT /delay/:delay, DELETE /delay/:delay, PATCH /delay/:delay, TRACE /delay/:delay
-const delayHandler = async (c: Context) => {
+dynamicData.all("/delay/:delay", async (c) => {
 	const delayParam = c.req.param("delay");
 	const delay = parseFloat(delayParam);
 
@@ -126,11 +126,4 @@ const delayHandler = async (c: Context) => {
 		origin: getOrigin(c),
 		url: c.req.url,
 	});
-};
-
-dynamicData.get("/delay/:delay", delayHandler);
-dynamicData.post("/delay/:delay", delayHandler);
-dynamicData.put("/delay/:delay", delayHandler);
-dynamicData.delete("/delay/:delay", delayHandler);
-dynamicData.patch("/delay/:delay", delayHandler);
-dynamicData.on("TRACE", "/delay/:delay", delayHandler);
+});
