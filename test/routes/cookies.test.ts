@@ -134,7 +134,11 @@ describe("Cookies", () => {
 
 	describe("GET /cookies/set", () => {
 		it("should set cookies from query parameters and redirect", async () => {
-			const res = await cookies.request("/cookies/set?foo=bar&baz=qux", {}, env);
+			const res = await cookies.request(
+				"/cookies/set?foo=bar&baz=qux",
+				{},
+				env,
+			);
 
 			expect(res.status).toBe(302);
 			expect(res.headers.get("location")).toBe("/cookies");
@@ -447,4 +451,3 @@ describe("Cookies", () => {
 		});
 	});
 });
-
