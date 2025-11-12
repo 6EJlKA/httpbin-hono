@@ -83,8 +83,15 @@ dynamicData.get("/bytes/:n", (c) => {
 	}
 
 	// Use crypto.getRandomValues if seed is not specified
+	// crypto.getRandomValues() only accepts buffers up to 64KB (65536 bytes)
+	// For larger buffers, we need to fill in chunks
 	const bytes = new Uint8Array(limitedN);
-	crypto.getRandomValues(bytes);
+	const maxChunkSize = 65536; // 64KB
+	for (let offset = 0; offset < limitedN; offset += maxChunkSize) {
+		const chunkSize = Math.min(maxChunkSize, limitedN - offset);
+		const chunk = bytes.subarray(offset, offset + chunkSize);
+		crypto.getRandomValues(chunk);
+	}
 
 	c.header("Content-Type", "application/octet-stream");
 	return c.body(bytes);
@@ -115,6 +122,7 @@ const delayHandler = async (c: Context) => {
 		data: bodyData.data,
 		files: bodyData.files,
 		headers: getHeaders(c),
+		json: bodyData.json,
 		origin: getOrigin(c),
 		url: c.req.url,
 	});
