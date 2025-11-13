@@ -77,8 +77,7 @@ dynamicData.get("/bytes/:n", (c) => {
 				randomSeed = (randomSeed * 1103515245 + 12345) & 0x7fffffff;
 				bytes[i] = randomSeed % 256;
 			}
-			c.header("Content-Type", "application/octet-stream");
-			return c.body(bytes);
+			return c.body(bytes, 200, { "Content-Type": "application/octet-stream" });
 		}
 	}
 
@@ -93,8 +92,7 @@ dynamicData.get("/bytes/:n", (c) => {
 		crypto.getRandomValues(chunk);
 	}
 
-	c.header("Content-Type", "application/octet-stream");
-	return c.body(bytes);
+	return c.body(bytes, 200, { "Content-Type": "application/octet-stream" });
 });
 
 // GET /delay/:delay, POST /delay/:delay, PUT /delay/:delay, DELETE /delay/:delay, PATCH /delay/:delay, TRACE /delay/:delay

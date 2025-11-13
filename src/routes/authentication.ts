@@ -184,16 +184,18 @@ authentication.get("/basic-auth/:user/:passwd", async (c) => {
 	const authHeader = c.req.header("authorization");
 
 	if (!authHeader || !authHeader.startsWith("Basic ")) {
-		c.header("WWW-Authenticate", 'Basic realm="Fake Realm"');
-		return c.body(null, 401);
+		return c.body(null, 401, {
+			"WWW-Authenticate": 'Basic realm="Fake Realm"',
+		});
 	}
 
 	const credentials = atob(authHeader.substring(6));
 	const [providedUser, providedPasswd] = credentials.split(":");
 
 	if (providedUser !== user || providedPasswd !== passwd) {
-		c.header("WWW-Authenticate", 'Basic realm="Fake Realm"');
-		return c.body(null, 401);
+		return c.body(null, 401, {
+			"WWW-Authenticate": 'Basic realm="Fake Realm"',
+		});
 	}
 
 	return c.json({
@@ -207,8 +209,7 @@ authentication.get("/bearer", (c) => {
 	const authHeader = c.req.header("authorization");
 
 	if (!authHeader || !authHeader.startsWith("Bearer ")) {
-		c.header("WWW-Authenticate", "Bearer");
-		return c.body(null, 401);
+		return c.body(null, 401, { "WWW-Authenticate": "Bearer" });
 	}
 
 	const token = authHeader.substring(7);
@@ -236,16 +237,14 @@ authentication.get("/digest-auth/:qop/:user/:passwd", async (c) => {
 	// If no authorization header, send challenge
 	if (!authHeader) {
 		const challenge = generateDigestChallenge(realm, qop, null, false);
-		c.header("WWW-Authenticate", challenge);
-		return c.body(null, 401);
+		return c.body(null, 401, { "WWW-Authenticate": challenge });
 	}
 
 	// Parse Digest authorization header
 	const authParams = parseDigestAuth(authHeader);
 	if (!authParams) {
 		const challenge = generateDigestChallenge(realm, qop, null, false);
-		c.header("WWW-Authenticate", challenge);
-		return c.body(null, 401);
+		return c.body(null, 401, { "WWW-Authenticate": challenge });
 	}
 
 	// Get request URI
@@ -265,8 +264,7 @@ authentication.get("/digest-auth/:qop/:user/:passwd", async (c) => {
 
 	if (!isValid) {
 		const challenge = generateDigestChallenge(realm, qop, null, false);
-		c.header("WWW-Authenticate", challenge);
-		return c.body(null, 401);
+		return c.body(null, 401, { "WWW-Authenticate": challenge });
 	}
 
 	return c.json({
@@ -302,16 +300,14 @@ authentication.get("/digest-auth/:qop/:user/:passwd/:algorithm", async (c) => {
 	// If no authorization header, send challenge
 	if (!authHeader) {
 		const challenge = generateDigestChallenge(realm, qop, algorithm, false);
-		c.header("WWW-Authenticate", challenge);
-		return c.body(null, 401);
+		return c.body(null, 401, { "WWW-Authenticate": challenge });
 	}
 
 	// Parse Digest authorization header
 	const authParams = parseDigestAuth(authHeader);
 	if (!authParams) {
 		const challenge = generateDigestChallenge(realm, qop, algorithm, false);
-		c.header("WWW-Authenticate", challenge);
-		return c.body(null, 401);
+		return c.body(null, 401, { "WWW-Authenticate": challenge });
 	}
 
 	// Get request URI
@@ -331,8 +327,7 @@ authentication.get("/digest-auth/:qop/:user/:passwd/:algorithm", async (c) => {
 
 	if (!isValid) {
 		const challenge = generateDigestChallenge(realm, qop, algorithm, false);
-		c.header("WWW-Authenticate", challenge);
-		return c.body(null, 401);
+		return c.body(null, 401, { "WWW-Authenticate": challenge });
 	}
 
 	return c.json({
@@ -382,8 +377,7 @@ authentication.get(
 				algorithm,
 				shouldBeStale,
 			);
-			c.header("WWW-Authenticate", challenge);
-			return c.body(null, 401);
+			return c.body(null, 401, { "WWW-Authenticate": challenge });
 		}
 
 		// Parse Digest authorization header
@@ -395,8 +389,7 @@ authentication.get(
 				algorithm,
 				shouldBeStale,
 			);
-			c.header("WWW-Authenticate", challenge);
-			return c.body(null, 401);
+			return c.body(null, 401, { "WWW-Authenticate": challenge });
 		}
 
 		// Get request URI
@@ -421,8 +414,7 @@ authentication.get(
 				algorithm,
 				shouldBeStale,
 			);
-			c.header("WWW-Authenticate", challenge);
-			return c.body(null, 401);
+			return c.body(null, 401, { "WWW-Authenticate": challenge });
 		}
 
 		return c.json({

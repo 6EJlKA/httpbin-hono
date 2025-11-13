@@ -54,28 +54,32 @@ responseInspection.get("/cache", (c) => {
 	}
 
 	// Return same as GET /get with Last-Modified and ETag headers
-	const response = c.json({
-		args: getQueryParams(c),
-		headers: getHeaders(c),
-		origin: getOrigin(c),
-		url: c.req.url,
-	});
-	response.headers.set("Last-Modified", httpDate());
-	response.headers.set("ETag", generateETag());
-	return response;
+	return c.json(
+		{
+			args: getQueryParams(c),
+			headers: getHeaders(c),
+			origin: getOrigin(c),
+			url: c.req.url,
+		},
+		200,
+		{ "Last-Modified": httpDate(), ETag: generateETag() },
+	);
 });
 
 // GET /cache/:value
 responseInspection.get("/cache/:value", (c) => {
 	const value = c.req.param("value");
-	c.header("Cache-Control", `public, max-age=${value}`);
 
-	return c.json({
-		args: getQueryParams(c),
-		headers: getHeaders(c),
-		origin: getOrigin(c),
-		url: c.req.url,
-	});
+	return c.json(
+		{
+			args: getQueryParams(c),
+			headers: getHeaders(c),
+			origin: getOrigin(c),
+			url: c.req.url,
+		},
+		200,
+		{ "Cache-Control": `public, max-age=${value}` },
+	);
 });
 
 // GET /etag/:etag
