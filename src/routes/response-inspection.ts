@@ -126,7 +126,8 @@ responseInspection.get("/response-headers", (c) => {
 		// Add the headers we're setting (these will be in the response)
 		for (const [key, value] of Object.entries(headersToSet)) {
 			if (Array.isArray(value)) {
-				result[key] = value.length === 1 ? value[0] : value;
+				// biome-ignore lint/style/noNonNullAssertion: value is not null
+				result[key] = value.length === 1 ? value[0]! : value;
 			} else {
 				result[key] = value;
 			}
@@ -204,7 +205,8 @@ responseInspection.post("/response-headers", async (c) => {
 
 		for (const [key, value] of Object.entries(headersToSet)) {
 			if (Array.isArray(value)) {
-				result[key] = value.length === 1 ? value[0] : value;
+				// biome-ignore lint/style/noNonNullAssertion: value is not null
+				result[key] = value.length === 1 ? value[0]! : value;
 			} else {
 				result[key] = String(value);
 			}

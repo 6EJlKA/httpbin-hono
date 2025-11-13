@@ -38,11 +38,13 @@ describe("Response Formats", () => {
 			expect(data.slideshow.date).toBe("date of publication");
 			expect(data.slideshow.author).toBe("Yours Truly");
 			expect(data.slideshow.slides).toHaveLength(2);
-			expect(data.slideshow.slides[0].type).toBe("all");
-			expect(data.slideshow.slides[0].title).toBe("Wake up to WonderWidgets!");
-			expect(data.slideshow.slides[1].type).toBe("all");
-			expect(data.slideshow.slides[1].title).toBe("Overview");
-			expect(data.slideshow.slides[1].items).toEqual([
+			expect(data.slideshow.slides?.[0]?.type).toBe("all");
+			expect(data.slideshow.slides?.[0]?.title).toBe(
+				"Wake up to WonderWidgets!",
+			);
+			expect(data.slideshow.slides?.[1]?.type).toBe("all");
+			expect(data.slideshow.slides?.[1]?.title).toBe("Overview");
+			expect(data.slideshow.slides?.[1]?.items).toEqual([
 				"Why <em>WonderWidgets</em> are great",
 				"Who <em>buys</em> WonderWidgets",
 			]);

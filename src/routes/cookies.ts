@@ -124,7 +124,8 @@ cookies.get("/cookies/set", (c) => {
 
 	Object.entries(params).forEach(([name, value]) => {
 		// Handle both string and string[] (use first value if array)
-		const cookieValue = Array.isArray(value) ? value[0] : value;
+		// biome-ignore lint/style/noNonNullAssertion: value is not null
+		const cookieValue = Array.isArray(value) ? value[0]! : value;
 		setCookie(c, name, cookieValue, {
 			path: "/",
 			httpOnly: false,

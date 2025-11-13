@@ -71,8 +71,8 @@ describe("Cookies", () => {
 			expect(data.cookies).toEqual({
 				foo: "bar",
 			});
-			expect(data.cookies._gauges_unique).toBeUndefined();
-			expect(data.cookies.__utmz).toBeUndefined();
+			expect(data.cookies["_gauges_unique"]).toBeUndefined();
+			expect(data.cookies["__utmz"]).toBeUndefined();
 		});
 
 		it("should show environment cookies when show_env query param is present", async () => {
@@ -88,9 +88,9 @@ describe("Cookies", () => {
 
 			expect(res.status).toBe(200);
 			const data = (await res.json()) as CookiesResponse;
-			expect(data.cookies.foo).toBe("bar");
-			expect(data.cookies._gauges_unique).toBe("123");
-			expect(data.cookies.__utmz).toBe("456");
+			expect(data.cookies["foo"]).toBe("bar");
+			expect(data.cookies["_gauges_unique"]).toBe("123");
+			expect(data.cookies["__utmz"]).toBe("456");
 		});
 
 		it("should handle cookies with empty values", async () => {
@@ -106,9 +106,9 @@ describe("Cookies", () => {
 
 			expect(res.status).toBe(200);
 			const data = (await res.json()) as CookiesResponse;
-			expect(data.cookies.foo).toBe("bar");
-			expect(data.cookies.empty).toBe("");
-			expect(data.cookies.baz).toBe("qux");
+			expect(data.cookies["foo"]).toBe("bar");
+			expect(data.cookies["empty"]).toBe("");
+			expect(data.cookies["baz"]).toBe("qux");
 		});
 
 		it("should handle cookies with spaces around semicolons", async () => {
@@ -158,8 +158,8 @@ describe("Cookies", () => {
 				env,
 			);
 			const data = (await redirectRes.json()) as CookiesResponse;
-			expect(data.cookies.foo).toBe("bar");
-			expect(data.cookies.baz).toBe("qux");
+			expect(data.cookies["foo"]).toBe("bar");
+			expect(data.cookies["baz"]).toBe("qux");
 		});
 
 		it("should set cookie with URL-encoded value", async () => {
@@ -183,8 +183,8 @@ describe("Cookies", () => {
 				env,
 			);
 			const data = (await redirectRes.json()) as CookiesResponse;
-			expect(data.cookies.name).toBe("John Doe");
-			expect(data.cookies.email).toBe("test@example.com");
+			expect(data.cookies["name"]).toBe("John Doe");
+			expect(data.cookies["email"]).toBe("test@example.com");
 		});
 
 		it("should set cookie with secure flag when using HTTPS", async () => {
@@ -254,7 +254,7 @@ describe("Cookies", () => {
 				env,
 			);
 			const data = (await redirectRes.json()) as CookiesResponse;
-			expect(data.cookies.foo).toBe("bar");
+			expect(data.cookies["foo"]).toBe("bar");
 		});
 
 		it("should handle URL-encoded values in path parameters", async () => {
@@ -278,7 +278,7 @@ describe("Cookies", () => {
 				env,
 			);
 			const data = (await redirectRes.json()) as CookiesResponse;
-			expect(data.cookies.name).toBe("John Doe");
+			expect(data.cookies["name"]).toBe("John Doe");
 		});
 
 		it("should handle special characters in cookie name and value", async () => {

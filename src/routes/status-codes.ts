@@ -43,14 +43,15 @@ function weightedChoice(choices: Array<[number, number]>): number {
 
 	const x = Math.random() * total;
 	let i = 0;
-	for (let j = 0; j < cumWeights.length; j++) {
-		if (x <= cumWeights[j]) {
+	for (const [j, weight] of cumWeights.entries()) {
+		if (x <= weight) {
 			i = j;
 			break;
 		}
 	}
 
-	return values[i];
+	// biome-ignore lint/style/noNonNullAssertion: i is not null
+	return values[i]!;
 }
 
 /**
@@ -112,8 +113,8 @@ function createStatusCodeResponse(code: number): {
 		status: code as ContentfulStatusCode,
 	};
 
-	if (code in codeMap) {
-		const m = codeMap[code];
+	const m = codeMap[code];
+	if (m) {
 		if (m.data !== undefined) {
 			response.body = m.data;
 		}
@@ -146,7 +147,7 @@ function handleStatusCodes(codes: string) {
 		let weight = 1;
 
 		if (choice.includes(":")) {
-			const parts = choice.split(":");
+			const parts = choice.split(":") as [string, string];
 			codeStr = parts[0];
 			weight = parseFloat(parts[1]);
 		} else {

@@ -8,6 +8,12 @@
 		"types": ["./worker-configuration.d.ts", "@cloudflare/vitest-pool-workers"],
 		"lib": ["ESNext"],
 		"jsx": "react-jsx",
-		"jsxImportSource": "hono/jsx"
+		"jsxImportSource": "hono/jsx",
+
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noPropertyAccessFromIndexSignature": true
 	}
 }

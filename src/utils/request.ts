@@ -115,7 +115,8 @@ function semiflatten(
 	const result: Record<string, string | string[]> = {};
 	for (const [key, value] of Object.entries(multi)) {
 		if (Array.isArray(value)) {
-			result[key] = value.length === 1 ? value[0] : value;
+			// biome-ignore lint/style/noNonNullAssertion: value is not null
+			result[key] = value.length === 1 ? value[0]! : value;
 		} else {
 			result[key] = value;
 		}
@@ -242,8 +243,8 @@ function parseFormData(
 		const params = new URLSearchParams(rawData);
 		const form: Record<string, string | string[]> = {};
 		params.forEach((value, key) => {
-			if (form[key]) {
-				const existing = form[key];
+			const existing = form[key];
+			if (existing) {
 				if (Array.isArray(existing)) {
 					existing.push(value);
 				} else {
@@ -282,8 +283,8 @@ export async function getFiles(
 				const fileContentType = value.type || "application/octet-stream";
 				const jsonSafeValue = jsonSafe(uint8Array, fileContentType);
 
-				if (files[key]) {
-					const existing = files[key];
+				const existing = files[key];
+				if (existing) {
 					if (Array.isArray(existing)) {
 						existing.push(jsonSafeValue);
 					} else {
@@ -410,8 +411,8 @@ export async function getRequestBodyData(c: Context): Promise<{
 					const fileContentType = value.type || "application/octet-stream";
 					const jsonSafeValue = jsonSafe(uint8Array, fileContentType);
 
-					if (files[key]) {
-						const existing = files[key];
+					const existing = files[key];
+					if (existing) {
 						if (Array.isArray(existing)) {
 							existing.push(jsonSafeValue);
 						} else {
