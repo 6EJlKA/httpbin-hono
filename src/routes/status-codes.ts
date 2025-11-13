@@ -12,15 +12,17 @@ const ACCEPTED_MEDIA_TYPES = [
 	"image/png",
 	"image/*",
 ];
-const ASCII_ART = `    -=[ teapot ]=-
+const ASCII_ART = `
+    -=[ teapot ]=-
 
        _...._
      .'  _ _ \`.
     | ."\` ^ \`". _,
-    \\_;"\`---"\`|//
+    \\_;\`"---"\`|//
       |       ;/
       \\_     _/
-        \`"\\"\\"\\"\``;
+        \`"""\`
+`;
 
 /**
  * Returns a value from choices chosen by weighted random selection

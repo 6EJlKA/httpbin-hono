@@ -3,6 +3,19 @@ import { Hono } from "hono";
 
 import { getHeaders, getOrigin } from "../utils/request";
 
+const DENY_ASCII_ART = `
+          .-''''''-.
+        .' _      _ '.
+       /   O      O   \\
+      :                :
+      |                |
+      :       __       :
+       \\  .-"\`  \`"-.  /
+        '.          .'
+          '-......-'
+     YOU SHOULDN'T BE HERE
+`;
+
 export const responseFormats = new Hono<{ Bindings: Env }>();
 
 async function serveTemplate(
@@ -77,23 +90,9 @@ Disallow: /deny
 
 // GET /deny
 responseFormats.get("/deny", (c) => {
-	return c.text(
-		`          .-''''''-.
-        .' _      _ '.
-       /   O      O   \\\\
-      :                :
-      |                |
-      :       __       :
-       \\\\  .-"\\\`  \\\`"-.  /
-        '.          .'
-          '-......-'
-     YOU SHOULDN'T BE HERE
-`,
-		200,
-		{
-			"Content-Type": "text/plain",
-		},
-	);
+	return c.text(DENY_ASCII_ART, 200, {
+		"Content-Type": "text/plain",
+	});
 });
 
 // GET /encoding/utf8
