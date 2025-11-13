@@ -77,23 +77,12 @@ const ENV_HEADERS = [
 ];
 
 export function getHeaders(c: Context, hideEnv = true): Record<string, string> {
-	const headers: Record<string, string> = {};
-	const headerObj = c.req.raw.headers;
-	headerObj.forEach((value, key) => {
-		headers[key] = value;
-	});
+	const headers = c.req.header();
 
 	// Hide environment headers by default (unless show_env query param is present)
 	if (hideEnv && !c.req.query("show_env")) {
 		for (const envHeader of ENV_HEADERS) {
-			// Case-insensitive comparison
-			const lowerEnvHeader = envHeader.toLowerCase();
-			for (const headerKey in headers) {
-				if (headerKey.toLowerCase() === lowerEnvHeader) {
-					delete headers[headerKey];
-					break;
-				}
-			}
+			delete headers[envHeader.toLowerCase()];
 		}
 	}
 
@@ -125,27 +114,7 @@ function semiflatten(
 }
 
 export function getQueryParams(c: Context): Record<string, string | string[]> {
-	const params: Record<string, string | string[]> = {};
-	const url = new URL(c.req.url);
-
-	// URLSearchParams can hold multiple values for the same key
-	const seenKeys = new Set<string>();
-	url.searchParams.forEach((value, key) => {
-		if (seenKeys.has(key)) {
-			// Convert to array if already exists
-			const existing = params[key];
-			if (Array.isArray(existing)) {
-				existing.push(value);
-			} else {
-				params[key] = [existing as string, value];
-			}
-		} else {
-			params[key] = value;
-			seenKeys.add(key);
-		}
-	});
-
-	return semiflatten(params);
+	return semiflatten(c.req.queries());
 }
 
 /**
