@@ -1,5 +1,6 @@
 import type { Context } from "hono";
 import { Hono } from "hono";
+import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 
 import { getQueryParams } from "../utils/request";
 
@@ -51,58 +52,9 @@ function secureCookie(c: Context): boolean {
 	}
 }
 
-function setCookie(
-	c: Context,
-	name: string,
-	value: string,
-	options: {
-		path?: string;
-		httpOnly?: boolean;
-		secure?: boolean;
-		sameSite?: "Strict" | "Lax" | "None";
-		maxAge?: number;
-	} = {},
-) {
-	const parts = [`${name}=${encodeURIComponent(value)}`];
-
-	if (options.path) {
-		parts.push(`Path=${options.path}`);
-	}
-
-	if (options.maxAge !== undefined) {
-		parts.push(`Max-Age=${options.maxAge}`);
-	}
-
-	if (options.httpOnly) {
-		parts.push("HttpOnly");
-	}
-
-	if (options.secure) {
-		parts.push("Secure");
-	}
-
-	if (options.sameSite) {
-		parts.push(`SameSite=${options.sameSite}`);
-	}
-
-	const cookieString = parts.join("; ");
-	// Use append to support multiple Set-Cookie headers
-	c.res.headers.append("Set-Cookie", cookieString);
-}
-
 // GET /cookies
 cookies.get("/cookies", (c) => {
-	const cookieHeader = c.req.header("cookie") || "";
-	const cookies: Record<string, string> = {};
-
-	if (cookieHeader) {
-		cookieHeader.split(";").forEach((cookie) => {
-			const [name, value] = cookie.trim().split("=");
-			if (name) {
-				cookies[name] = value ? decodeURIComponent(value) : "";
-			}
-		});
-	}
+	const cookies = getCookie(c);
 
 	// Hide environment cookies by default (unless show_env query param is present)
 	const hideEnv = !c.req.query("show_env");
@@ -113,26 +65,22 @@ cookies.get("/cookies", (c) => {
 	}
 
 	return c.json({
-		cookies: cookies,
+		cookies,
 	});
 });
 
 // GET /cookies/set
 cookies.get("/cookies/set", (c) => {
-	const params = getQueryParams(c);
-	const cookieValues: Record<string, string> = {};
+	const params = c.req.queries();
 
 	Object.entries(params).forEach(([name, value]) => {
-		// Handle both string and string[] (use first value if array)
-		// biome-ignore lint/style/noNonNullAssertion: value is not null
-		const cookieValue = Array.isArray(value) ? value[0]! : value;
-		setCookie(c, name, cookieValue, {
+		// biome-ignore lint/style/noNonNullAssertion: value is not empty
+		setCookie(c, name, value[0]!, {
 			path: "/",
 			httpOnly: false,
 			secure: secureCookie(c),
 			sameSite: "Lax",
 		});
-		cookieValues[name] = cookieValue;
 	});
 
 	return c.redirect("/cookies");
@@ -158,12 +106,11 @@ cookies.get("/cookies/delete", (c) => {
 	const params = getQueryParams(c);
 
 	Object.keys(params).forEach((name) => {
-		setCookie(c, name, "", {
+		deleteCookie(c, name, {
 			path: "/",
 			httpOnly: false,
 			secure: secureCookie(c),
 			sameSite: "Lax",
-			maxAge: 0,
 		});
 	});
 
