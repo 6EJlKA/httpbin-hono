@@ -218,60 +218,6 @@ describe("Redirects", () => {
 			expect(res.status).toBe(307);
 			expect(res.headers.get("location")).toBe("/post");
 		});
-
-		it("should redirect to specified URL from form data", async () => {
-			const formData = new FormData();
-			formData.append("url", "/post");
-			formData.append("status_code", "307");
-
-			const res = await redirects.request(
-				"/redirect-to",
-				{
-					method: "POST",
-					body: formData,
-				},
-				env,
-			);
-
-			expect(res.status).toBe(307);
-			expect(res.headers.get("location")).toBe("/post");
-		});
-
-		it("should prioritize form data over query parameters", async () => {
-			const formData = new FormData();
-			formData.append("url", "/put");
-			formData.append("status_code", "301");
-
-			const res = await redirects.request(
-				"/redirect-to?url=/post&status_code=307",
-				{
-					method: "POST",
-					body: formData,
-				},
-				env,
-			);
-
-			expect(res.status).toBe(301);
-			expect(res.headers.get("location")).toBe("/put");
-		});
-
-		it("should handle case-insensitive parameters", async () => {
-			const formData = new FormData();
-			formData.append("URL", "/post");
-			formData.append("STATUS_CODE", "307");
-
-			const res = await redirects.request(
-				"/redirect-to",
-				{
-					method: "POST",
-					body: formData,
-				},
-				env,
-			);
-
-			expect(res.status).toBe(307);
-			expect(res.headers.get("location")).toBe("/post");
-		});
 	});
 
 	describe("PUT /redirect-to", () => {
@@ -285,24 +231,6 @@ describe("Redirects", () => {
 			);
 
 			expect(res.status).toBe(307);
-			expect(res.headers.get("location")).toBe("/put");
-		});
-
-		it("should redirect to specified URL from form data", async () => {
-			const formData = new FormData();
-			formData.append("url", "/put");
-			formData.append("status_code", "301");
-
-			const res = await redirects.request(
-				"/redirect-to",
-				{
-					method: "PUT",
-					body: formData,
-				},
-				env,
-			);
-
-			expect(res.status).toBe(301);
 			expect(res.headers.get("location")).toBe("/put");
 		});
 	});
@@ -320,24 +248,6 @@ describe("Redirects", () => {
 			expect(res.status).toBe(307);
 			expect(res.headers.get("location")).toBe("/delete");
 		});
-
-		it("should redirect to specified URL from form data", async () => {
-			const formData = new FormData();
-			formData.append("url", "/delete");
-			formData.append("status_code", "301");
-
-			const res = await redirects.request(
-				"/redirect-to",
-				{
-					method: "DELETE",
-					body: formData,
-				},
-				env,
-			);
-
-			expect(res.status).toBe(301);
-			expect(res.headers.get("location")).toBe("/delete");
-		});
 	});
 
 	describe("PATCH /redirect-to", () => {
@@ -353,24 +263,6 @@ describe("Redirects", () => {
 			expect(res.status).toBe(307);
 			expect(res.headers.get("location")).toBe("/patch");
 		});
-
-		it("should redirect to specified URL from form data", async () => {
-			const formData = new FormData();
-			formData.append("url", "/patch");
-			formData.append("status_code", "301");
-
-			const res = await redirects.request(
-				"/redirect-to",
-				{
-					method: "PATCH",
-					body: formData,
-				},
-				env,
-			);
-
-			expect(res.status).toBe(301);
-			expect(res.headers.get("location")).toBe("/patch");
-		});
 	});
 
 	describe("TRACE /redirect-to", () => {
@@ -384,24 +276,6 @@ describe("Redirects", () => {
 			);
 
 			expect(res.status).toBe(307);
-			expect(res.headers.get("location")).toBe("/get");
-		});
-
-		it("should redirect to specified URL from form data", async () => {
-			const formData = new FormData();
-			formData.append("url", "/get");
-			formData.append("status_code", "301");
-
-			const res = await redirects.request(
-				"/redirect-to",
-				{
-					method: "TRACE",
-					body: formData,
-				},
-				env,
-			);
-
-			expect(res.status).toBe(301);
 			expect(res.headers.get("location")).toBe("/get");
 		});
 	});

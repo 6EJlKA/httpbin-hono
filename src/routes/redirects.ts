@@ -4,62 +4,12 @@ import type { RedirectStatusCode } from "hono/utils/http-status";
 export const redirects = new Hono();
 
 /**
- * Case-insensitive dictionary for parameters
+ * Convert all keys to lowercase
  */
-class CaseInsensitiveDict {
-	private data: Map<string, string> = new Map();
-
-	set(key: string, value: string): void {
-		const lowerKey = key.toLowerCase();
-		this.data.set(lowerKey, value);
-	}
-
-	get(key: string): string | undefined {
-		const lowerKey = key.toLowerCase();
-		return this.data.get(lowerKey);
-	}
-
-	has(key: string): boolean {
-		const lowerKey = key.toLowerCase();
-		return this.data.has(lowerKey);
-	}
-}
-
-/**
- * Get all parameters from query string and form data (case-insensitive)
- */
-async function getAllParams(c: Context): Promise<CaseInsensitiveDict> {
-	const params = new CaseInsensitiveDict();
-
-	// Get query parameters
-	const queryParams = c.req.query();
-	for (const [key, value] of Object.entries(queryParams)) {
-		if (value !== undefined && value !== null) {
-			params.set(key, String(value));
-		}
-	}
-
-	// Get form data if Content-Type is application/x-www-form-urlencoded
-	const contentType = c.req.header("content-type") || "";
-	if (
-		contentType.includes("application/x-www-form-urlencoded") ||
-		contentType.includes("multipart/form-data")
-	) {
-		try {
-			const formData = await c.req.parseBody();
-			for (const [key, value] of Object.entries(formData)) {
-				if (!(value instanceof File) && value !== undefined) {
-					const strValue = String(value);
-					// Form data takes precedence over query params
-					params.set(key, strValue);
-				}
-			}
-		} catch {
-			// Ignore parsing errors
-		}
-	}
-
-	return params;
+function toLowerKeys(q: Record<string, string>): Record<string, string> {
+	return Object.fromEntries(
+		Object.entries(q).map(([key, value]) => [key.toLowerCase(), value]),
+	);
 }
 
 /**
@@ -129,21 +79,19 @@ redirects.get("/absolute-redirect/:n", (c) => {
  * Handle /redirect-to for all supported methods
  */
 async function handleRedirectTo(c: Context) {
-	const args = await getAllParams(c);
-	const url = args.get("url");
+	const args = toLowerKeys(c.req.query());
+	const url = args["url"];
 
 	if (!url) {
 		return c.json({ error: "Missing url parameter" }, 400);
 	}
 
 	let statusCode = 302;
-	if (args.has("status_code")) {
-		const statusCodeStr = args.get("status_code");
-		if (statusCodeStr) {
-			const parsed = parseInt(statusCodeStr, 10);
-			if (parsed >= 300 && parsed < 400) {
-				statusCode = parsed;
-			}
+	const statusCodeStr = args["status_code"];
+	if (statusCodeStr) {
+		const parsed = parseInt(statusCodeStr, 10);
+		if (parsed >= 300 && parsed < 400) {
+			statusCode = parsed;
 		}
 	}
 
