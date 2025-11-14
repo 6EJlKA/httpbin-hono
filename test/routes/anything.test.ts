@@ -29,7 +29,7 @@ describe("Anything", () => {
 			expect(data.origin).toBeDefined();
 			expect(data.data).toBe("");
 			expect(data.files).toEqual({});
-			expect(data.form).toBeNull();
+			expect(data.form).toEqual({});
 			expect(data.json).toBeNull();
 		});
 
@@ -89,7 +89,7 @@ describe("Anything", () => {
 			expect(data.origin).toBeDefined();
 			expect(data.data).toBe("");
 			expect(data.files).toEqual({});
-			expect(data.form).toBeNull();
+			expect(data.form).toEqual({});
 			expect(data.json).toBeNull();
 		});
 

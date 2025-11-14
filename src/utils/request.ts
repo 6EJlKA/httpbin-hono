@@ -231,7 +231,10 @@ export async function getRequestBodyData(c: Context): Promise<{
 	const contentType = c.req.header("content-type") || "";
 
 	// Use parseBody for multipart/form-data
-	if (contentType.includes("multipart/form-data")) {
+	if (
+		contentType.includes("multipart/form-data") ||
+		contentType.includes("application/x-www-form-urlencoded")
+	) {
 		try {
 			// Clone request body to get both form/files and data
 			const formData = await c.req.parseBody();
@@ -282,9 +285,9 @@ export async function getRequestBodyData(c: Context): Promise<{
 			};
 		} catch {
 			return {
+				data: "",
 				form: null,
 				files: {},
-				data: "",
 				json: null,
 			};
 		}
@@ -293,10 +296,6 @@ export async function getRequestBodyData(c: Context): Promise<{
 	// Use getRawData for other cases
 	const rawData = await getRawDataFromContext(c);
 	const data = jsonSafe(rawData);
-
-	// Parse form data
-	const form =
-		typeof rawData === "string" ? parseFormData(rawData, contentType) : null;
 
 	// Parse JSON
 	let json: unknown = null;
@@ -309,9 +308,9 @@ export async function getRequestBodyData(c: Context): Promise<{
 	}
 
 	return {
-		form,
-		files: {},
 		data,
+		files: {},
+		form: {},
 		json,
 	};
 }
