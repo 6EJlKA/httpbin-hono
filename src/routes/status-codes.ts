@@ -170,17 +170,7 @@ function handleStatusCodes(codes: string) {
 	return createStatusCodeResponse(selectedCode);
 }
 
-/**
- * Common handler for all HTTP methods
- */
-function statusCodeHandler(c: {
-	req: { param: (key: string) => string };
-	text: (
-		body: string,
-		status?: ContentfulStatusCode,
-		headers?: Record<string, string>,
-	) => Response;
-}) {
+statusCodes.all("/status/:codes", (c) => {
 	const codes = c.req.param("codes");
 	const result = handleStatusCodes(codes);
 
@@ -200,22 +190,4 @@ function statusCodeHandler(c: {
 	}
 
 	return c.text("", result.status);
-}
-
-// GET /status/:codes
-statusCodes.get("/status/:codes", statusCodeHandler);
-
-// POST /status/:codes
-statusCodes.post("/status/:codes", statusCodeHandler);
-
-// PUT /status/:codes
-statusCodes.put("/status/:codes", statusCodeHandler);
-
-// DELETE /status/:codes
-statusCodes.delete("/status/:codes", statusCodeHandler);
-
-// PATCH /status/:codes
-statusCodes.patch("/status/:codes", statusCodeHandler);
-
-// TRACE /status/:codes
-statusCodes.on("TRACE", "/status/:codes", statusCodeHandler);
+});
