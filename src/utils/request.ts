@@ -118,54 +118,29 @@ export function getQueryParams(c: Context): Record<string, string | string[]> {
 }
 
 /**
- * Returns JSON-safe version of data.
- * If data is a Unicode string or valid UTF-8, it is returned unmodified.
- * If data contains raw/binary data, it is Base64-encoded and returned as data URL.
+ * Returns JSON-safe version of `string`.
+ * If `buf` is a Unicode string or a valid UTF-8, it is returned unmodified,
+ * as it can safely be encoded to JSON string.
+ * If `buf` contains raw/binary data, it is Base64-encoded, formatted and
+ * returned according to "data" URL scheme (RFC2397). Since JSON is not
+ * suitable for binary data, some additional encoding was necessary; "data"
+ * URL scheme was chosen for its simplicity.
+ *
+ * @see https://github.com/postmanlabs/httpbin/blob/f8ec666b4d1b654e4ff6aedd356f510dcac09f83/httpbin/helpers.py#L85
  */
-export function jsonSafe(
-	data: string | Uint8Array | ArrayBuffer,
-	contentType = "application/octet-stream",
+function jsonSafe(
+	buffer: ArrayBuffer,
+	content_type = "application/octet-stream",
 ): string {
-	if (typeof data === "string") {
-		// Check if it can be treated as UTF-8 string
-		try {
-			// Check if it can be encoded as JSON
-			JSON.stringify(data);
-			return data;
-		} catch {
-			// Base64 encode if it cannot be encoded as JSON
-			const encoder = new TextEncoder();
-			const uint8Array = encoder.encode(data);
-			return jsonSafe(uint8Array, contentType);
-		}
-	}
-
-	// For binary data
-	let uint8Array: Uint8Array;
-	if (data instanceof ArrayBuffer) {
-		uint8Array = new Uint8Array(data);
-	} else {
-		uint8Array = data;
-	}
-
-	// Try to decode as UTF-8
 	try {
-		const decoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: false });
-		const decoded = decoder.decode(uint8Array);
-		// Check if it can be encoded as JSON
-		JSON.stringify(decoded);
-		return decoded;
+		const str = new TextDecoder("utf-8", {
+			fatal: true,
+			ignoreBOM: false,
+		}).decode(buffer);
+		JSON.stringify(str);
+		return str;
 	} catch {
-		// Base64 encode if it cannot be decoded as UTF-8
-		// Process in chunks to handle large arrays
-		let binaryString = "";
-		const chunkSize = 8192;
-		for (let i = 0; i < uint8Array.length; i += chunkSize) {
-			const chunk = uint8Array.slice(i, i + chunkSize);
-			binaryString += String.fromCharCode(...chunk);
-		}
-		const base64 = btoa(binaryString);
-		return `data:${contentType};base64,${base64}`;
+		return `data:${content_type};base64,${btoa(String.fromCharCode(...new Uint8Array(buffer)))}`;
 	}
 }
 
@@ -195,9 +170,7 @@ export async function getRequestBodyData(c: Context): Promise<{
 			for (const [key, value] of Object.entries(formData)) {
 				if (value instanceof File) {
 					const arrayBuffer = await value.arrayBuffer();
-					const uint8Array = new Uint8Array(arrayBuffer);
-					const fileContentType = value.type || "application/octet-stream";
-					const jsonSafeValue = jsonSafe(uint8Array, fileContentType);
+					const jsonSafeValue = jsonSafe(arrayBuffer, value.type);
 
 					const existing = files[key];
 					if (existing) {
