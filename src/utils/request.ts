@@ -293,18 +293,20 @@ export async function getRequestBodyData(c: Context): Promise<{
 		}
 	}
 
-	// Use getRawData for other cases
-	const rawData = await getRawDataFromContext(c);
+	const rawData = await c.req.arrayBuffer();
 	const data = jsonSafe(rawData);
 
 	// Parse JSON
 	let json: unknown = null;
-	if (typeof rawData === "string") {
-		try {
-			json = JSON.parse(rawData);
-		} catch {
-			// Set to null if cannot parse as JSON
-		}
+	try {
+		json = JSON.parse(
+			new TextDecoder("utf-8", {
+				fatal: true,
+				ignoreBOM: false,
+			}).decode(rawData),
+		);
+	} catch {
+		// Set to null if cannot parse as JSON
 	}
 
 	return {
