@@ -1,11 +1,8 @@
 import { Hono } from "hono";
 
-import {
-	getHeaders,
-	getOrigin,
-	getQueryParams,
-	getRequestBodyData,
-} from "../utils/request";
+import { getRequestBodyData } from "../utils/body";
+import { getHeaders, getOrigin } from "../utils/headers";
+import { getQueryParams } from "../utils/query";
 
 export const dynamicData = new Hono();
 
@@ -116,9 +113,9 @@ dynamicData.all("/delay/:delay", async (c) => {
 
 	return c.json({
 		args: getQueryParams(c),
-		form: bodyData.form,
 		data: bodyData.data,
 		files: bodyData.files,
+		form: bodyData.form,
 		headers: getHeaders(c),
 		json: bodyData.json,
 		origin: getOrigin(c),

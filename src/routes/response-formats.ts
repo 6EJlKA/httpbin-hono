@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { Hono } from "hono";
 
-import { getHeaders, getOrigin } from "../utils/request";
+import { getHeaders, getOrigin } from "../utils/headers";
 
 const DENY_ASCII_ART = `
           .-''''''-.
@@ -112,10 +112,10 @@ responseFormats.get("/brotli", (c) => {
 	const origin = getOrigin(c);
 
 	return c.json({
-		method: c.req.method,
-		headers,
-		origin,
 		brotli: true,
+		headers,
+		method: c.req.method,
+		origin,
 	});
 });
 
@@ -127,10 +127,10 @@ responseFormats.get("/deflate", (c) => {
 	const origin = getOrigin(c);
 
 	return c.json({
-		method: c.req.method,
-		headers,
-		origin,
 		deflated: true,
+		headers,
+		method: c.req.method,
+		origin,
 	});
 });
 
@@ -142,9 +142,9 @@ responseFormats.get("/gzip", (c) => {
 	const origin = getOrigin(c);
 
 	return c.json({
-		method: c.req.method,
-		headers,
-		origin,
 		gzipped: true,
+		headers,
+		method: c.req.method,
+		origin,
 	});
 });

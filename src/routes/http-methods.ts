@@ -1,11 +1,8 @@
 import { Hono } from "hono";
 
-import {
-	getHeaders,
-	getOrigin,
-	getQueryParams,
-	getRequestBodyData,
-} from "../utils/request";
+import { getRequestBodyData } from "../utils/body";
+import { getHeaders, getOrigin } from "../utils/headers";
+import { getQueryParams } from "../utils/query";
 
 export const httpMethods = new Hono();
 
@@ -33,14 +30,14 @@ httpMethods.post("/post", async (c) => {
 	const url = c.req.url;
 
 	return c.json({
-		url,
 		args,
-		form,
 		data,
-		origin,
-		headers,
 		files,
+		form,
+		headers,
 		json,
+		origin,
+		url,
 	});
 });
 
@@ -53,14 +50,14 @@ httpMethods.put("/put", async (c) => {
 	const url = c.req.url;
 
 	return c.json({
-		url,
 		args,
-		form,
 		data,
-		origin,
-		headers,
 		files,
+		form,
+		headers,
 		json,
+		origin,
+		url,
 	});
 });
 
@@ -73,14 +70,14 @@ httpMethods.patch("/patch", async (c) => {
 	const url = c.req.url;
 
 	return c.json({
-		url,
 		args,
-		form,
 		data,
-		origin,
-		headers,
 		files,
+		form,
+		headers,
 		json,
+		origin,
+		url,
 	});
 });
 
@@ -93,13 +90,13 @@ httpMethods.delete("/delete", async (c) => {
 	const url = c.req.url;
 
 	return c.json({
-		url,
 		args,
-		form,
 		data,
-		origin,
-		headers,
 		files,
+		form,
+		headers,
 		json,
+		origin,
+		url,
 	});
 });

@@ -2,7 +2,7 @@ import type { Context } from "hono";
 import { Hono } from "hono";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 
-import { getQueryParams } from "../utils/request";
+import { getQueryParams } from "../utils/query";
 
 export const cookies = new Hono();
 
