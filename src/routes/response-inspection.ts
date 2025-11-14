@@ -35,15 +35,6 @@ function httpDate(): string {
 	return new Date().toUTCString();
 }
 
-/**
- * Generate a random ETag (hex string)
- */
-function generateETag(): string {
-	return Array.from(crypto.getRandomValues(new Uint8Array(16)))
-		.map((b) => b.toString(16).padStart(2, "0"))
-		.join("");
-}
-
 // GET /cache
 responseInspection.get("/cache", (c) => {
 	const ifModifiedSince = c.req.header("if-modified-since");
@@ -63,7 +54,10 @@ responseInspection.get("/cache", (c) => {
 			url: c.req.url,
 		},
 		200,
-		{ "Last-Modified": httpDate(), ETag: generateETag() },
+		{
+			"Last-Modified": httpDate(),
+			ETag: crypto.randomUUID().replaceAll("-", ""),
+		},
 	);
 });
 
@@ -91,9 +85,7 @@ responseInspection.get("/etag/:etag", (c) => {
 
 	if (ifNoneMatch.length > 0) {
 		if (ifNoneMatch.includes(etag) || ifNoneMatch.includes("*")) {
-			const response = c.body(null, 304);
-			response.headers.set("ETag", `"${etag}"`);
-			return response;
+			return c.body(null, 304, { ETag: etag });
 		}
 	} else if (ifMatch.length > 0) {
 		if (!ifMatch.includes(etag) && !ifMatch.includes("*")) {
@@ -102,14 +94,16 @@ responseInspection.get("/etag/:etag", (c) => {
 	}
 
 	// Special cases don't apply, return normal response
-	const response = c.json({
-		args: getQueryParams(c),
-		headers: getHeaders(c),
-		origin: getOrigin(c),
-		url: c.req.url,
-	});
-	response.headers.set("ETag", `"${etag}"`);
-	return response;
+	return c.json(
+		{
+			args: getQueryParams(c),
+			headers: getHeaders(c),
+			origin: getOrigin(c),
+			url: c.req.url,
+		},
+		200,
+		{ ETag: etag },
+	);
 });
 
 // GET /response-headers

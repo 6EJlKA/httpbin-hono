@@ -104,7 +104,7 @@ describe("Response Inspection", () => {
 			const res = await responseInspection.request(`/etag/${etag}`, {}, env);
 
 			expect(res.status).toBe(200);
-			expect(res.headers.get("etag")).toBe(`"${etag}"`);
+			expect(res.headers.get("etag")).toBe(etag);
 
 			const data = (await res.json()) as GetResponse;
 			expect(data.url).toContain(`/etag/${etag}`);
@@ -116,14 +116,14 @@ describe("Response Inspection", () => {
 				`/etag/${etag}`,
 				{
 					headers: {
-						"If-None-Match": `"${etag}"`,
+						"If-None-Match": etag,
 					},
 				},
 				env,
 			);
 
 			expect(res.status).toBe(304);
-			expect(res.headers.get("etag")).toBe(`"${etag}"`);
+			expect(res.headers.get("etag")).toBe(etag);
 			const text = await res.text();
 			expect(text).toBe("");
 		});
@@ -141,7 +141,7 @@ describe("Response Inspection", () => {
 			);
 
 			expect(res.status).toBe(304);
-			expect(res.headers.get("etag")).toBe(`"${etag}"`);
+			expect(res.headers.get("etag")).toBe(etag);
 		});
 
 		it("should return 304 when If-None-Match contains multiple values including the ETag", async () => {
@@ -157,7 +157,7 @@ describe("Response Inspection", () => {
 			);
 
 			expect(res.status).toBe(304);
-			expect(res.headers.get("etag")).toBe(`"${etag}"`);
+			expect(res.headers.get("etag")).toBe(etag);
 		});
 
 		it("should return 200 when If-None-Match does not match the ETag", async () => {
@@ -173,7 +173,7 @@ describe("Response Inspection", () => {
 			);
 
 			expect(res.status).toBe(200);
-			expect(res.headers.get("etag")).toBe(`"${etag}"`);
+			expect(res.headers.get("etag")).toBe(etag);
 		});
 
 		it("should return 412 when If-Match does not match the ETag", async () => {
@@ -199,14 +199,14 @@ describe("Response Inspection", () => {
 				`/etag/${etag}`,
 				{
 					headers: {
-						"If-Match": `"${etag}"`,
+						"If-Match": etag,
 					},
 				},
 				env,
 			);
 
 			expect(res.status).toBe(200);
-			expect(res.headers.get("etag")).toBe(`"${etag}"`);
+			expect(res.headers.get("etag")).toBe(etag);
 		});
 
 		it("should return 200 when If-Match contains wildcard", async () => {
@@ -222,7 +222,7 @@ describe("Response Inspection", () => {
 			);
 
 			expect(res.status).toBe(200);
-			expect(res.headers.get("etag")).toBe(`"${etag}"`);
+			expect(res.headers.get("etag")).toBe(etag);
 		});
 
 		it("should handle weak ETags in If-None-Match", async () => {
@@ -231,14 +231,14 @@ describe("Response Inspection", () => {
 				`/etag/${etag}`,
 				{
 					headers: {
-						"If-None-Match": `W/"${etag}"`,
+						"If-None-Match": `W/${etag}`,
 					},
 				},
 				env,
 			);
 
 			expect(res.status).toBe(304);
-			expect(res.headers.get("etag")).toBe(`"${etag}"`);
+			expect(res.headers.get("etag")).toBe(etag);
 		});
 
 		it("should handle multiple weak ETags in If-None-Match", async () => {
@@ -254,7 +254,7 @@ describe("Response Inspection", () => {
 			);
 
 			expect(res.status).toBe(304);
-			expect(res.headers.get("etag")).toBe(`"${etag}"`);
+			expect(res.headers.get("etag")).toBe(etag);
 		});
 	});
 
