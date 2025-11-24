@@ -109,15 +109,15 @@ dynamicData.all("/delay/:delay", async (c) => {
 
 	await new Promise((resolve) => setTimeout(resolve, limitedDelay * 1000));
 
-	const bodyData = await getRequestBodyData(c);
+	const { data, files, form, json } = await getRequestBodyData(c);
 
 	return c.json({
 		args: getQueryParams(c),
-		data: bodyData.data,
-		files: bodyData.files,
-		form: bodyData.form,
+		data,
+		files,
+		form,
 		headers: getHeaders(c),
-		json: bodyData.json,
+		json,
 		origin: getOrigin(c),
 		url: c.req.url,
 	});

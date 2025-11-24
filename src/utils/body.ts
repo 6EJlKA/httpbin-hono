@@ -4,8 +4,6 @@
 
 import type { Context } from "hono";
 
-import { semiflatten } from "./query";
-
 /**
  * Returns JSON-safe version of `string`.
  * If `buf` is a Unicode string or a valid UTF-8, it is returned unmodified,
@@ -50,6 +48,31 @@ function parseJson(rawData: ArrayBuffer): unknown {
 }
 
 /**
+ * Append a value to a multi-value dictionary
+ * If the key already exists, the value is appended to the array
+ * If the key does not exist, the value is set to the key
+ * @param multi - The multi-value dictionary
+ * @param key - The key to append the value to
+ * @param value - The value to append to the key
+ */
+function semiflattenAppend(
+	multi: Record<string, string | string[]>,
+	key: string,
+	value: string,
+) {
+	const existing = multi[key];
+	if (existing) {
+		if (Array.isArray(existing)) {
+			existing.push(value);
+		} else {
+			multi[key] = [existing, value];
+		}
+	} else {
+		multi[key] = value;
+	}
+}
+
+/**
  * Get all request body data (form, files, data, json) efficiently
  * This function handles the request body reading once and returns all needed data
  */
@@ -62,32 +85,34 @@ export async function getRequestBodyData(c: Context): Promise<{
 	const form: Record<string, string | string[]> = {};
 	const files: Record<string, string | string[]> = {};
 
-	const contentType = c.req.header("content-type") || "";
+	const contentType = c.req.header("content-type");
 	if (
 		// is form data or urlencoded data
-		contentType.includes("multipart/form-data") ||
-		contentType.includes("application/x-www-form-urlencoded")
+		contentType?.includes("multipart/form-data") ||
+		contentType?.includes("application/x-www-form-urlencoded")
 	)
 		try {
-			const formData = await c.req.parseBody();
+			const formData = await c.req.parseBody({ all: true });
 
 			for (const [key, value] of Object.entries(formData)) {
-				if (value instanceof File) {
+				if (Array.isArray(value)) {
+					for (const item of value) {
+						if (item instanceof File) {
+							const arrayBuffer = await item.arrayBuffer();
+							const jsonSafeValue = jsonSafe(arrayBuffer, item.type);
+
+							semiflattenAppend(files, key, jsonSafeValue);
+						} else {
+							semiflattenAppend(form, key, item);
+						}
+					}
+				} else if (value instanceof File) {
 					const arrayBuffer = await value.arrayBuffer();
 					const jsonSafeValue = jsonSafe(arrayBuffer, value.type);
 
-					const existing = files[key];
-					if (existing) {
-						if (Array.isArray(existing)) {
-							existing.push(jsonSafeValue);
-						} else {
-							files[key] = [existing, jsonSafeValue];
-						}
-					} else {
-						files[key] = jsonSafeValue;
-					}
+					files[key] = jsonSafeValue;
 				} else {
-					form[key] = value as string;
+					form[key] = value;
 				}
 			}
 		} catch {
@@ -104,7 +129,7 @@ export async function getRequestBodyData(c: Context): Promise<{
 	return {
 		data: jsonSafe(rawData),
 		files,
-		form: semiflatten(form),
+		form,
 		json: parseJson(rawData),
 	};
 }

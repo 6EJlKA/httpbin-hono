@@ -9,7 +9,7 @@ import type { Context } from "hono";
  * If there are more than one value for a key, the result will have a list of values.
  * Otherwise it will have the plain value.
  */
-export function semiflatten(
+function semiflatten(
 	multi: Record<string, string | string[]>,
 ): Record<string, string | string[]> {
 	if (!multi || Object.keys(multi).length === 0) {
