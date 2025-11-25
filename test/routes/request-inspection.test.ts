@@ -290,12 +290,12 @@ describe("Request Inspection", () => {
 			expect(data["user-agent"]).toBe("mixed-case-agent");
 		});
 
-		it("should return empty string when User-Agent header is not present", async () => {
+		it("should return null when User-Agent header is not present", async () => {
 			const res = await requestInspection.request("/user-agent", {}, env);
 
 			expect(res.status).toBe(200);
 			const data = (await res.json()) as UserAgentResponse;
-			expect(data["user-agent"]).toBe("");
+			expect(data["user-agent"]).toBe(null);
 		});
 
 		it("should return empty string when User-Agent header is empty", async () => {
