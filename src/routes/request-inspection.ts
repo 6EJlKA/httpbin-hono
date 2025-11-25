@@ -17,11 +17,7 @@ requestInspection.get("/headers", (c) => {
 // Returns the requester's IP Address.
 // Original implementation: request.headers.get("X-Forwarded-For", request.remote_addr)
 requestInspection.get("/ip", (c) => {
-	// Match original httpbin behavior: X-Forwarded-For first, then fallback
-	const xForwardedFor = c.req.header("x-forwarded-for");
-	const origin = xForwardedFor
-		? xForwardedFor.split(",")[0]?.trim() || "unknown"
-		: getOrigin(c);
+	const origin = getOrigin(c);
 
 	return c.json({
 		origin,

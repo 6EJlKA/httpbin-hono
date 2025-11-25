@@ -178,7 +178,7 @@ describe("Request Inspection", () => {
 			expect(data.origin).toBe("192.168.1.300");
 		});
 
-		it("should prioritize X-Forwarded-For over CF-Connecting-IP", async () => {
+		it("should prioritize CF-Connecting-IP over X-Forwarded-For", async () => {
 			const res = await requestInspection.request(
 				"/ip",
 				{
@@ -192,8 +192,8 @@ describe("Request Inspection", () => {
 
 			expect(res.status).toBe(200);
 			const data = (await res.json()) as IpResponse;
-			// X-Forwarded-For should take priority
-			expect(data.origin).toBe("192.168.1.100");
+			// CF-Connecting-IP should take priority
+			expect(data.origin).toBe("192.168.1.200");
 		});
 
 		it("should return unknown when no IP headers are present", async () => {
