@@ -95,17 +95,7 @@ async function handleRedirectTo(c: Context) {
 		}
 	}
 
-	// Build response manually to set Location header
-	// This prevents the framework from "fixing" the URL
-	// The URL is set as-is (UTF-8 encoding is handled by the HTTP layer)
-	const response = c.newResponse("", {
-		status: statusCode as RedirectStatusCode,
-		headers: {
-			Location: url,
-		},
-	});
-
-	return response;
+	return c.redirect(url, statusCode as RedirectStatusCode);
 }
 
 // GET /redirect-to
